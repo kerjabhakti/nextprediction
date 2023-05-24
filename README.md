@@ -11,6 +11,6 @@ Enter the ```web``` directory and run the ```env\scripts\activate``` command
 
 Enter the ```nextwordpredictor``` directory
 
-```python manaye.py runserver```
+```python manage.py runserver```
 
 Visit 127.0.0.1:8000
