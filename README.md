@@ -7,7 +7,13 @@ TA Alwizain
 
 ```open terminal```
 
-Enter the ```web``` directory and run the ```env\scripts\activate``` command
+Enter the ```web``` directory 
+
+Create a virtual environment with the command ```python -m venv env```
+
+Run virtual environment with the command ```env\scripts\activate```
+
+Install requirements of project with the command ```pip install requirements.txt```
 
 Enter the ```nextwordpredictor``` directory
 
