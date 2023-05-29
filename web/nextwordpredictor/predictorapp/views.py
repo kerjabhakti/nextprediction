@@ -13,8 +13,9 @@ print(BASE_DIR)
 MODEL_PATH = BASE_DIR + '/predictormodel/256-100.h5'
 TOKENIZER_PATH = BASE_DIR + '/predictormodel/tokenizer.pkl'
 
-INDO_MODEL_PATH = BASE_DIR + '/predictormodel/models/model6.h5'
-INDO_TOKENIZER_PATH = BASE_DIR + '/predictormodel/tokenizers/token6.pkl'
+INDO_MODEL_PATH = BASE_DIR + '/predictormodel/models/model6pre4.h5'
+INDO_TOKENIZER_PATH = BASE_DIR + '/predictormodel/tokenizers/token6pre4.pkl'
+INDO_PADDING_PATH = BASE_DIR + '/predictormodel/paddings/padding6pre4.pkl'
 
 def load_language(tokenizer, m, overwrite_model=False):
 	
@@ -30,16 +31,20 @@ tokenizer = load(open(INDO_TOKENIZER_PATH, 'rb'))
 tokenizer.oov_token = None
 print('\tDONE.')
 
-model = NextWordModel()
-model.load_model_and_tokenizer(tokenizer, INDO_MODEL_PATH)
+print('Loading padding...')
+padding = load(open(INDO_PADDING_PATH, 'rb'))
+print('\tDONE.')
 
-seq_length = 2
+model = NextWordModel()
+model.load_model_tokenizer_and_padding(tokenizer, INDO_PADDING_PATH, INDO_MODEL_PATH)
+
+max_sequence_len = padding
 
 @api_view(['GET', 'POST'])
 def predict(request):
 	if request.method == 'POST':
 		pretext = request.data['text']
-		predicted_words = model.generate_seq(seq_length, pretext, 1)
+		predicted_words = model.generate_seq(max_sequence_len, pretext, 1)
 		return Response({"predicted_words": predicted_words})
 	return Response({"text": "<TEXT HERE>"})
 

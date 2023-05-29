@@ -224,7 +224,7 @@
 			<br>
 			<main style="text-align: center;">
 				<div style="display: inline-block;">
-					<input type="text" id="textInput" name="textInput" placeholder="Tulis judul buku yang Anda cari..."> 
+					<input type="text" id="textInput" onkeyup="callSearchAPI(event)" name="textInput" placeholder="Tulis judul buku yang Anda cari..."> 
 					<!-- onkeyup="callSearchAPI()" -->
 					<div class = "dropdown" id="dropdown">
 						<!-- <option class="dropdown-content" value=0 onclick="appendWords(value)">A</option>
@@ -307,7 +307,7 @@
 			var dropdownContentList = document.getElementsByClassName('dropdown-content');
 			
 		}
-
+		
 		function callSearchAPI(){
 			var textInTextField = document.getElementById('textInput').value;
 			console.log(textInTextField);
@@ -328,7 +328,7 @@
 				}).then(res => res.json())
 				.then(response => {
 					console.log('Success:', JSON.stringify(response))
-					var nextWordList = [response['predicted_words'][0]['word'], response['predicted_words'][1]['word'],response['predicted_words'][2]['word']]; // replace with the word return from API
+					var nextWordList = [response['predicted_words'][0]['word'], response['predicted_words'][1]['word']]; // replace with the word return from API
 					listSuggestion(nextWordList);
 				})
 			}
@@ -345,7 +345,7 @@
 
 
 		function listSuggestion(nextWordList){
-			document.getElementById('dropdown').innerHTML = "<option class=\"dropdown-content\" value=0 onclick=\"appendWords(value)\"></option><option class=\"dropdown-content\" value=1 onclick=\"appendWords(value)\"></option><option class=\"dropdown-content\" value=2 onclick=\"appendWords(value)\"></option>";
+			document.getElementById('dropdown').innerHTML = "<option class=\"dropdown-content\" value=0 onclick=\"appendWords(value)\"></option><option class=\"dropdown-content\" value=1 onclick=\"appendWords(value)\">";
 			for (var i = 0; i < nextWordList.length ; i++) {
 				document.getElementsByClassName('dropdown-content')[i].text = nextWordList[i];
 			}
