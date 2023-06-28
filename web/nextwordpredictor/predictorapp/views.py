@@ -1,21 +1,24 @@
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+
 # Create your views here.
 import os
 from pickle import load
 from predictormodel.model import NextWordModel
 from keras import backend as K
+from .models import Buku
+from django.core.paginator import Paginator
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 print(BASE_DIR)
 
-MODEL_PATH = BASE_DIR + '/predictormodel/256-100.h5'
-TOKENIZER_PATH = BASE_DIR + '/predictormodel/tokenizer.pkl'
+# MODEL_PATH = BASE_DIR + '/predictormodel/256-100.h5'
+# TOKENIZER_PATH = BASE_DIR + '/predictormodel/tokenizer.pkl'
 
-INDO_MODEL_PATH = BASE_DIR + '/predictormodel/models/model6pre4.h5'
-INDO_TOKENIZER_PATH = BASE_DIR + '/predictormodel/tokenizers/token6pre4.pkl'
-INDO_PADDING_PATH = BASE_DIR + '/predictormodel/paddings/padding6pre4.pkl'
+INDO_MODEL_PATH = BASE_DIR + '/predictormodel/models/model6pre13.h5'
+INDO_TOKENIZER_PATH = BASE_DIR + '/predictormodel/tokenizers/token6pre13.pkl'
+INDO_PADDING_PATH = BASE_DIR + '/predictormodel/paddings/padding6pre13.pkl'
 
 def load_language(tokenizer, m, overwrite_model=False):
 	
@@ -49,4 +52,12 @@ def predict(request):
 	return Response({"text": "<TEXT HERE>"})
 
 def index(request):
-	return render(request,'index.html')
+	bukus_ = Buku.objects.all()
+	paginator = Paginator(bukus_, 20)
+	page = request.GET.get('page')
+	books = paginator.get_page(page)
+	
+	context = {
+		"data": books,
+	}
+	return render(request,'index.html', context)

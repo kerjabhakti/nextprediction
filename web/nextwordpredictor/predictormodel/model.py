@@ -11,7 +11,7 @@ class NextWordModel(object):
 		print('Loading model...')
 		self.padding = padding
 		print('Loading model...')
-		self.model = load_model(model_path)
+		self.model = load_model(model_path, compile=False)
 		self.model.make_predict_function()
 		print('Model Loaded!')
 
@@ -33,11 +33,11 @@ class NextWordModel(object):
 			# predict probabilities for each word
 			# yhat = self.model.predict_classes(encoded, verbose=0)
 			predicted_l = list(tuple(enumerate(self.model.predict(token_list)[0])))
-			top_3 = sorted(predicted_l, key=lambda x: x[1], reverse=True)[:2]
-			print(top_3)
+			top_2 = sorted(predicted_l, key=lambda x: x[1], reverse=True)[:2]
+			print(top_2)
 			# map predicted word index to word
 			predicted_words = []
-			for i, word in enumerate(top_3):
+			for i, word in enumerate(top_2):
 				for w in list(self.tokenizer.word_index.items()):
 					if w[1] == word[0]:
 						predicted_words.append({'word': w[0], 'probability': word[1]})

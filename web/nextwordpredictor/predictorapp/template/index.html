@@ -1,263 +1,144 @@
+{% load static %}
+{% load customfunction %}
 <!DOCTYPE html>
 <html>
 <head>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 	<title>Next Word Predictor</title>
-	<style>
-		/* body{
-			background-image: linear-gradient(to right, #d16ba5, #c777b9, #ba83ca, #aa8fd8, #9a9ae1, #8aa7ec, #79b3f4, #69bff8, #52cffe, #41dfff, #46eefa, #5ffbf1);
-
-		} */
-
-		body {
-          overflow-y: scroll;  /* Hide scrollbars */
-          -ms-overflow-style: none;  /* IE dan Edge */
-          scrollbar-width: none;  /* Firefox */
-        }
-
-        /* Sembunyikan scrollbar dari Chrome, Safari dan Opera */
-        body::-webkit-scrollbar {
-            display: none;
-        }
-
-		header{
-			padding: 10px;
-			margin: 10px;
-			font-family: "Trebuchet MS", Helvetica, sans-serif;
-			text-align: center;
-			background-image: linear-gradient(to right, #d16ba5, #c777b9, #ba83ca, #aa8fd8, #9a9ae1, #8aa7ec, #79b3f4, #69bff8, #52cffe, #41dfff, #46eefa, #5ffbf1);
-			color: white;
-		}
-
-		footer{
-			background-color: #94af76;
-			background-image: linear-gradient(to right, #d16ba5, #c777b9, #ba83ca, #aa8fd8, #9a9ae1, #8aa7ec, #79b3f4, #69bff8, #52cffe, #41dfff, #46eefa, #5ffbf1);
-			color: white;
-			text-align: center;
-			position: fixed;
-  			width: 100%;
-  			right: 0;
-  			bottom: 0;
-		}
-
-		.credit{
-			align-self: left;
-			color: white;
-		}
-
-		input{
-		    padding: 10px;
-		    margin: 10px;
-		    margin-bottom: 0px;
-		    height: 30px;
-		    width: 500px;
-		    border:2px solid #a9a9a9;
-		    outline:none;
-		}
-
-		input:hover{
-	    	border-color: #a0a0a0 #b9b9b9 #b9b9b9 #b9b9b9;
-		}
-
-		input:focus{
-		    border-color:#fe9d4d;
-		}
-
-		input[type="submit"] {
-		    border-radius: 2px;
-		    background: #f2f2f2;
-		    border: 1px solid #f2f2f2;
-		    color: #757575;
-		    cursor: default;
-		    font-size: 14px;
-		    font-weight: bold;
-		    width: 300px;
-		    padding: 0 16px;
-		    height:36px;
-		}
-
-		input[type="submit"]:hover {
-		    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
-		    background: #f8f8f8;
-		    border: 1px solid #c6c6c6;
-		    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
-		    color: #222;
-		}
-
-		.dropdown{
-			border: 1px solid #c6c6c6;
-		    margin: 10px;
-		    margin-top: 0px;
-		    width: 520px;
-		    background-color: white;
-		}
-
-		.dropdown-content{
-			color: black;
-			padding: 12px 16px;
-			text-decoration: none;
-			display: block;
-			text-align: left;
-			/* margin-left: 10px; */
-		}
-
-		.dropdown-content:hover {
-			background-color: #ddd;
-			cursor: pointer;
-		}
-
-
-		.dropbtn {
-		  background-color: #3498DB;
-		  color: white;
-		  padding: 16px;
-		  font-size: 16px;
-		  border: none;
-		  cursor: pointer;
-		}
-
-		.dropbtn:hover, .dropbtn:focus {
-		  background-color: #2980B9;
-		}
-
-		.dropdownbtn {
-		  position: relative;
-		  display: inline-block;
-		}
-
-		.dropdownbtn-content {
-		  display: none;
-		  position: absolute;
-		  background-color: #f1f1f1;
-		  min-width: 160px;
-		  overflow: auto;
-		  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-		  z-index: 1;
-		}
-
-		.dropdownbtn-content a {
-		  color: black;
-		  padding: 12px 16px;
-		  text-decoration: none;
-		  display: block;
-		}
-
-		.dropdownbtn a:hover {background-color: #ddd;}
-
-		.showbtn {display: block;}
-
-		#loading {
-		   width: 100%;
-		   height: 100%;
-		   top: 0;
-		   left: 0;
-		   position: fixed;
-		   display: none;
-		   opacity: 0.7;
-		   background-color: #fff;
-		   z-index: 99;
-		   text-align: center;
-		}
-
-		#loading-image {
-		  position: absolute;
-		  display: block;
-		  margin: auto;
-		  z-index: 100;
-		}
-
-	</style>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 </head>
 <body>
 	
-		<div class="container-fluid">
-			<!-- Navbar -->
-			<nav class="navbar navbar-expand-lg navbar-dark shadow-5-strong">
-				<!-- Container wrapper -->
-				<div class="container" style="margin-top: 10pt;">
-					<!-- Navbar brand -->
-					<a class="navbar-brand" href="/">#CariBuku</a>
-				
-					<!-- Toggle button -->
-					<button
-						class="navbar-toggler"
-						type="button"
-						data-mdb-toggle="collapse"
-						data-mdb-target="#navbarSupportedContent"
-						aria-controls="navbarSupportedContent"
-						aria-expanded="false"
-						aria-label="Toggle navigation"
-					>
-						<i class="fas fa-bars"></i>
-					</button>
-				
-					<!-- Collapsible wrapper -->
-					<div class="collapse navbar-collapse" id="navbarSupportedContent">
-						<!-- Left links -->
-						<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-							<li class="nav-item">
-								<a class="nav-link active" aria-current="page" href="#">Hubungi Kami</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link active" href="#">Tentang</a>
-							</li>
-						</ul>
-						<!-- Left links -->
-					</div>
-					<!-- Collapsible wrapper -->
+	<div class="container-fluid">
+		<!-- Navbar -->
+		<nav class="navbar navbar-expand-lg navbar-dark shadow-5-strong">
+			<!-- Container wrapper -->
+			<div class="container" style="margin-top: 10pt;">
+				<!-- Navbar brand -->
+				<a class="navbar-brand" href="/">#CariBuku</a>
+			
+				<!-- Toggle button -->
+				<button
+					class="navbar-toggler"
+					type="button"
+					data-mdb-toggle="collapse"
+					data-mdb-target="#navbarSupportedContent"
+					aria-controls="navbarSupportedContent"
+					aria-expanded="false"
+					aria-label="Toggle navigation"
+				>
+					<i class="fas fa-bars"></i>
+				</button>
+			
+				<!-- Collapsible wrapper -->
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<!-- Left links -->
+					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+						<li class="nav-item">
+							<a class="nav-link active" aria-current="page" href="#">Hubungi Kami</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link active" href="#">Tentang</a>
+						</li>
+					</ul>
+					<!-- Left links -->
 				</div>
-				<!-- Container wrapper -->
-			</nav>
-			<!-- Navbar -->
-		</div>
-	
-
-	
-		<img src="\static\images\book.jpg" class="img-fluid" alt="..." style="margin-top: -300pt;">
-		<!-- Image by jcomp on Freepik -->
-
-		<div class="container-fluid">
-			<div class="landingtext text-center" style="margin-top: -450pt; color: aliceblue;">
-				<h1>#CariBuku Tidak Sesulit Melupakan Masa Lalu,<br> Cari Judul Buku Anda Dengan Mudah</h1>
+				<!-- Collapsible wrapper -->
 			</div>
-	
-			<br>
-			<main style="text-align: center;">
-				<div style="display: inline-block;">
-					<input type="text" id="textInput" onkeyup="callSearchAPI(event)" name="textInput" placeholder="Tulis judul buku yang Anda cari..."> 
-					<!-- onkeyup="callSearchAPI()" -->
-					<div class = "dropdown" id="dropdown">
-						<!-- <option class="dropdown-content" value=0 onclick="appendWords(value)">A</option>
-						<option class="dropdown-content" value=1 onclick="appendWords(value)">B</option>
-						<option class="dropdown-content" value=2 onclick="appendWords(value)">C</option> -->
-					</div>
-				</div>
-			</main>
+			<!-- Container wrapper -->
+		</nav>
+		<!-- Navbar -->
+	</div>
 
-			<div id="loading" >
-				<img id="loading-image" src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/04de2e31234507.564a1d23645bf.gif" alt="Loading..." />
-			</div>
+
+
+	<img src="\static\images\book.jpg" class="img-fluid" alt="..." style="margin-top: -300pt;">
+	<!-- Image by jcomp on Freepik -->
+
+	<div class="container-fluid">
+		<div class="landingtext text-center" style="margin-top: -450pt; color: aliceblue;">
+			<h1>#CariBuku Tidak Sesulit Melupakan Masa Lalu,<br> Cari Judul Buku Anda Dengan Mudah</h1>
 		</div>
 
-		<br><br><br>
+		<br>
+		<main style="text-align: center;">
+			<div style="display: inline-block;">
+				
+				<form action="{% url 'search:search' %}" autocomplete="off" method="GET">
+					<input type="search" id="textInput" onkeyup="callSearchAPI(event)" name="q" 
+						placeholder="Tulis judul buku yang Anda cari..." value="{{search}}"> 
+				</form>
 
-		<div class="container">
-			<div class="card">
-				<ul class="list-group list-group-flush">
-					<li class="list-group-item">An item</li>
-					<li class="list-group-item">A second item</li>
-					<li class="list-group-item">A third item</li>
+				<!-- onkeyup="callSearchAPI()" -->
+				<div class = "dropdown" id="dropdown">
+
+				</div>
+			</div>
+		</main>
+	</div>
+
+	<br><br>
+	<br><br>
+
+	<div id="searchResults">
+		<div class="container text-center">
+			{% for data in data %}
+			<div class="book-wrapper text-center">
+				<div class="coverpage">
+					<img src="{{ data.cover_buku }}"/>
+				</div>
+				<a>{{ data.judul_buku|text_short }}...</a>
+				<!-- <p> {{ data.stok }} </p> -->
+			</div>
+			{% endfor %}
+
+			{% if data|length > 0 %}
+			<div class="d-pagination">
+				<ul class="pagination">
+				{% if data.has_previous %}
+					<li class="page-item">
+						<a class="page-link" href="?page=1">First</a>
+					</li>								
+					<li class="page-item">
+						<a class="page-link" href="?page={{ data.previous_page_number }}">Previous</a>
+					</li>
+				{% endif %}
+				{% for ord in data.paginator.page_range %}
+					{% if data.number == ord %}
+						<li class="page-item active">
+							<span class="page-link">{{ ord }}
+								<span class="sr-only">(current)</span>
+							</span>
+						</li>
+					{% elif ord > data.number|add:'-3' and ord < data.number|add:'3' %}
+						<li class="page-item">
+							<a class="page-link" href="?page={{ ord }}">{{ ord }}</a>
+						</li>
+
+					{% endif %}
+
+				{% endfor %}
+				{% if data.has_next %}
+					<li class="page-item">
+						<a class="page-link" href="?page={{ data.next_page_number }}">Next</a>
+					</li>
+					<li class="page-item">
+						<a class="page-link" href="?page={{ data.paginator.num_pages }}">Last</a>
+					</li>
+				{% endif %}
 				</ul>
 			</div>
+			{% else %}
+			<h3 class="text-center mt-5" style="color: aliceblue;">Pencarian tidak ditemukan.</h3>
+			{% endif %}	
 		</div>
-
+	</div>
 
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
 
 </body>
-	
 	<script type="text/javascript">
 		var pressedValue = -1;
 		var textInTextField = document.getElementById('textInput');
@@ -308,50 +189,128 @@
 			
 		}
 		
-		function callSearchAPI(){
-			var textInTextField = document.getElementById('textInput').value;
+		function callSearchAPI(event){
+			let textInTextField = document.getElementById('textInput').value;
 			console.log(textInTextField);
+
+			// Split the input string into an array of words
+			let words = textInTextField.split(' ');
+
+			// Truncate the array to the first 5 elements
+			if (words.length > 8) {
+				// Clear the dropdown and return from the function
+				document.getElementById('dropdown').innerHTML = "";
+    			return;
+			}
+
+			// Join the array back into a string
+			textInTextField = words.join(' ');
 
 			if(textInTextField == ''){
 				document.getElementById('dropdown').innerHTML = "";
 			}else{
 				//call API with textInTextField
-				var url = 'http://127.0.0.1:8000/prediction/';
-				var data = {text: textInTextField};
+				let url = 'http://127.0.0.1:8000/prediction/';
+				let data = {text: textInTextField};
 
 				fetch(url, {
-				  method: 'POST', // or 'PUT'
-				  body: JSON.stringify(data), // data can be `string` or {object}!
-				  headers:{
-				    'Content-Type': 'application/json'
-				  }
-				}).then(res => res.json())
+				method: 'POST', // or 'PUT'
+				body: JSON.stringify(data), // data can be `string` or {object}!
+				headers:{
+					'Content-Type': 'application/json'
+				}
+				})
+				.then(res => res.json())
 				.then(response => {
 					console.log('Success:', JSON.stringify(response))
-					var nextWordList = [response['predicted_words'][0]['word'], response['predicted_words'][1]['word']]; // replace with the word return from API
+					let nextWordList = [response['predicted_words'][0]['word'], response['predicted_words'][1]['word']]; // replace with the word return from API
 					listSuggestion(nextWordList);
 				})
-			}
-			
-		}
+			}			
+		};
+		
 
 		function appendWords(selectValue) {
 			console.log(selectValue);
 			var selectWordArray = document.getElementsByClassName('dropdown-content');
 			// console.log(selectWordArray[selectValue]);
-			document.getElementById('textInput').value += ' '+ selectWordArray[selectValue].text;
+			document.getElementById('textInput').value = selectWordArray[selectValue].text;
 			callSearchAPI();
 		}
 
 
 		function listSuggestion(nextWordList){
-			document.getElementById('dropdown').innerHTML = "<option class=\"dropdown-content\" value=0 onclick=\"appendWords(value)\"></option><option class=\"dropdown-content\" value=1 onclick=\"appendWords(value)\">";
+			document.getElementById('dropdown').innerHTML = "<option class=\"dropdown-content\" value=0 onclick=\"appendWords(value)\"></option><option class=\"dropdown-content\" value=1 onclick=\"appendWords(value)\"></option>";
+			let textInTextField = document.getElementById('textInput').value;
+			console.log(textInTextField);
 			for (var i = 0; i < nextWordList.length ; i++) {
-				document.getElementsByClassName('dropdown-content')[i].text = nextWordList[i];
+				document.getElementsByClassName('dropdown-content')[i].text = textInTextField +' '+nextWordList[i];
+				document.getElementsByClassName('dropdown-content')[i].addEventListener('click', function() {
+
+					// Perbarui URL dengan nilai pilihan dropdown
+					var query = textInput.value.trim();
+					history.pushState({}, '', '/search/?q=' + encodeURIComponent(query));
+
+					// Perbarui halaman secara otomatis
+  					window.location.href = '/search/?q=' + encodeURIComponent(query);
+				});
 			}
 			//added
-			dropdownContentList = document.getElementsByClassName('dropdown-content');
-			pressedValue = -1
+			// dropdownContentList = document.getElementsByClassName('dropdown-content');
+			// pressedValue = -1
+		}
+
+		// Ambil elemen input pencarian
+		var textInput = document.getElementById('textInput');
+		var timeoutId;
+
+		// Tambahkan event listener untuk mengikuti perubahan pada input pencarian
+		textInput.addEventListener('input', function() {
+			// Hapus timeout sebelumnya (jika ada)
+			clearTimeout(timeoutId);
+
+			
+			// Dapatkan nilai pencarian
+			var query = textInput.value.trim();
+			
+			// Ubah URL menggunakan pushState API
+			history.pushState({}, '', '/search/?q=' + encodeURIComponent(query));
+			
+			var lastChar = textInput.value.slice(-1);
+			if (lastChar === " ") {
+			
+			} else {
+				// Setelah 4 detik dari penghentian pengetikan, perbarui URL dan halaman
+				timeoutId = setTimeout(function() {
+					// Perbarui halaman secara otomatis
+					window.location.href = '/search/?q=' + encodeURIComponent(query)
+				}, 2000);
+			}
+			
+			// // Cek apakah terakhir ditekan adalah tombol spasi
+			// var lastChar = textInput.value.slice(-1);
+			// if (lastChar === " ") {
+			// 	// Perbarui halaman secara otomatis
+			// 	window.location.href = '/search/?q=' + encodeURIComponent(query);
+
+			// 	// // Perbarui halaman secara otomatis
+			// 	// window.location.reload();
+			// }
+		});
+
+		// Setelah halaman selesai dimuat, fokuskan kembali ke input pencarian
+		window.addEventListener('load', function() {
+			textInput.focus();
+			textInput.setSelectionRange(textInput.value.length, textInput.value.length);
+		});
+
+		// Fungsi untuk memperbarui hasil pencarian
+		function updateSearchResults(query) {
+			// Lakukan permintaan AJAX atau panggil view Django melalui API
+			// untuk mendapatkan hasil pencarian berdasarkan query
+			// Update elemen HTML yang menampilkan hasil pencarian
+			// Menggunakan jQuery:
+			$('#searchResults').load('/search/?q=' + encodeURIComponent(query));
 		}
 
 		function myDropDownBtnFunction() {
@@ -372,8 +331,4 @@
 		}
 
 	</script>
-
-	<!-- <footer>
-		<br><h4>WIX 3001 Soft Computing Next Word Predictor</h4><br>
-	</footer> -->
 </html>
